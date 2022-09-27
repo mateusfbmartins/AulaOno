@@ -8,3 +8,11 @@ export function getComponent(element, text){
 
     return component;
 };
+/* 
+export function getComponent(element){
+    var component = document.createElement(element);
+
+    return component;
+};
+
+ */
