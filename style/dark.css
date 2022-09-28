@@ -29,6 +29,10 @@ p{
 .header-logo img {
     transition: all 0.4s ease-in-out;
 }
+.header-logo img:hover {
+    cursor: pointer;
+}
+
 
 .header-navigation a {
     text-decoration: none;
@@ -175,14 +179,16 @@ li{
     height: 205px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    cursor: pointer;
 
 }
 
-img {
+img:hover {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
     width: 150px;
+
 }
 
 input[type="checkbox"] {
@@ -225,7 +231,12 @@ p{
     text-align: center;
 }
 
-
+img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 150px;
+}
 
 #button-up {
     width: 60px;
@@ -241,4 +252,4 @@ p{
   
   #button-up:hover {
     background-color: #b9ae0c;
-  }
+}

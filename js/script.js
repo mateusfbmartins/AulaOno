@@ -14,6 +14,7 @@ const divLogo = getComponent('div', '');
 divLogo.classList.add('header-logo');
 const logo = getComponent('img', ''); 
 logo.setAttribute('src', './img/logo-correio.png');
+logo.onclick = inicio;
 divLogo.appendChild(logo);
 
 divHeader.appendChild(divLogo);
@@ -153,6 +154,7 @@ function contato(){
 }
 
 function limpaDiv(){
+    upPage();
     const divContainer = document.getElementById('inicio');
     if(divContainer != null){
         divContainer.remove();
@@ -238,9 +240,6 @@ function createMenu(text){
 
     return div;
 }
-
-
-
 
 function addImgs(){
     const srcImgs = [
