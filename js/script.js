@@ -312,7 +312,8 @@ async function request(type, url){
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", "*");
-
+    myHeaders.append("Access-Control-Request-Headers", "Content-Type, Authorization");
+    myHeaders.append("Access-Control-Request-Method", "GET");
 
     var requestOptions = {
         Method: 'GET',
