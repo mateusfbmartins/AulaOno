@@ -93,6 +93,8 @@ function inicio(){
             alert(obj.objetos[0].mensagem);
         }
         else addEventosScreen(obj);
+
+        await teste();
     });
 }
 
@@ -308,22 +310,44 @@ async function request(type, url){
     var msgRecebida = "";
 
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "text/plain");
-    myHeaders.append("User-Agent", "any-name");
-  //  myHeaders.append("X-Request-With", "XmlHttpRequest");
-    myHeaders.append('Access-Control-Allow-Origin', '*');
-    myHeaders.append('Origin', 'https://mateusfbmartins.github.io/');
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+
 
     var requestOptions = {
-        method: type,
+        Method: 'GET',
         headers: myHeaders,
-        redirect: 'follow'
+        redirect: 'follow',
+        Cache: 'default'
     };
 
-//    var request = await fetch("https://cors-anywhere.herokuapp.com/https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
 
-    var request = await fetch("https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
+   //var request = await fetch("https://cors-anywhere.herokuapp.com/https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
+   var request = await fetch("https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
+  
+
+    //var request = await fetch("https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
     msgRecebida = await request.json();
     return msgRecebida;
 
+
 }
+
+/* async function  teste(){
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    
+    xhr.addEventListener("readystatechange", function() {
+      if(this.readyState === 4) {
+        console.log(this.responseText);
+      }
+    });
+    
+    xhr.open("GET", "https://proxyapp.correios.com.br/v1/sro-rastro/NA391180648BR");
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    // WARNING: Cookies will be stripped away by the browser before sending the request.
+   // xhr.setRequestHeader("Cookie", "f5avraaaaaaaaaaaaaaaa_session_=AKIEBKONHJEGEOOKCLPLENLGENPKADJMIFPKDOIJILOOJPLOMDHNPODPAOJOPKHLNAADENJLGLEIBMAHCOGABJBFAMDBDGHHFFPIDHBLCPKMPFCANMOMLCMLBFKAACEK; LBprdExt1=633864202.47873.0000; LBprdint1=221970442.47873.0000");
+    
+    xhr.send();
+} */
