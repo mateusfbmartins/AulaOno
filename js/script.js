@@ -80,7 +80,8 @@ function inicio(){
 
     formPacote.addEventListener('submit', async(ev) => {
         ev.preventDefault();
-        const inputValue = txtPacote.value.toUpperCase();
+        var inputValue = txtPacote.value.toUpperCase();
+        inputValue = inputValue.replace(' ', '');
 
         if(inputValue != '' && inputValue.length == 13){
             while(divEventos.firstChild) {
