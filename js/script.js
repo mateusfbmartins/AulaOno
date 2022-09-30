@@ -7,7 +7,7 @@ divHeader.classList.add('header');
 body.appendChild(divHeader);
 
 //const ulNavigation = getComponent('ul', '');
-const ulNavigation = createMenu([['Inicio', inicio], ['Sobre nós', sobre], ['Entre em contato', contato]]);
+const ulNavigation = createMenu([['Inicio', inicio], ['Sobre', sobre], ['Entre em contato', contato]]);
 ulNavigation.classList.add('header-navigation');
 
 const divLogo = getComponent('div', '');
@@ -80,21 +80,25 @@ function inicio(){
 
     formPacote.addEventListener('submit', async(ev) => {
         ev.preventDefault();
-        const inputValue = txtPacote.value;
-    
-        while(divEventos.firstChild) {
-            divEventos.removeChild(divEventos.firstChild);
-        }
-    
-        var obj =  await request('GET', inputValue);
-        console.log(obj);
-    
-        if(obj.objetos[0].hasOwnProperty('mensagem')){
-            alert(obj.objetos[0].mensagem);
-        }
-        else addEventosScreen(obj);
+        const inputValue = txtPacote.value.toUpperCase();
 
-        await teste();
+        if(inputValue != '' && inputValue.length == 13){
+            while(divEventos.firstChild) {
+                divEventos.removeChild(divEventos.firstChild);
+            }
+        
+            var obj =  await request('GET', inputValue);
+        
+            if(obj.objetos[0].hasOwnProperty('mensagem')){
+                alert(obj.objetos[0].mensagem);
+            }
+            else addEventosScreen(obj);
+        }
+        else{
+            alert('Digite o código de rastreio!');
+        }
+    
+
     });
 }
 
@@ -104,7 +108,14 @@ function sobre(){
     const divInto = getComponent('div', '');
     divInto.classList.add('container-intro');
     divInto.setAttribute('id', 'inicio');
-    divBody.appendChild(divInto);  
+    divBody.appendChild(divInto);
+    
+    const msgSobre = "<h1>RASTREIO DE OBJETOS.IO</h1>"
+    +"<p>Este é um site para rastremento de objetos do CORREIOS.</p>" 
+    + "<br><p>Você pode usar o seguinte código NA391180648BR para o teste do sistema.</p>" 
+    
+    
+    divInto.innerHTML = msgSobre;
     
 }
 
@@ -130,27 +141,62 @@ function contato(){
 
     function createForm(){
         const itensForm = [
-            ['nome', 'Digite seu Nome'],,
-            ['email', 'Digite seu email'],
-            ['telefone', 'Digite seu telefone'],
-            ['assunto', 'Digite o assunto'],
-            ['mensagem', 'Digite a mensagem']
+            ['nome', 'Digite seu Nome', 'text'],,
+            ['email', 'Digite seu email', 'text'],
+            ['telefone', 'Digite seu telefone', 'text'],
+            ['assunto', 'Digite o assunto', 'text'],
+            ['mensagem', 'Digite a mensagem', 'text'],
+            ['Reclamação', 'Reclamação', 'radio'],
+            ['Sugestão', 'Sugestão', 'radio'],
+            ['Feedback', 'Feedback', 'radio'],
+            ['Enviar Formulario', 'ENVIAR FORMULARIO', 'submit'],
         ];
         itensForm.forEach(element => {
             const inputForm = getComponent('input');
             const labelForm = getComponent('label');
 
             labelForm.textContent = element[0].toUpperCase();
+            inputForm.setAttribute('type',  element[2]);    
 
-            inputForm.setAttribute('text', element[1]);
-            inputForm.setAttribute('type', 'text');
-            inputForm.setAttribute('placeholder', element[1])
+            if(element[2] === 'radio'){
+                inputForm.setAttribute('value', element[1]);
+                inputForm.setAttribute('name',  'element[2]');   
+                
+                labelForm.setAttribute('id', 'label');
+                form.appendChild(inputForm);
+                form.appendChild(labelForm);
+            }
+            if(element[2] === 'submit'){
+                inputForm.setAttribute('value', element[1]);
+               
+                inputForm.onclick = function(){
+                    alert('Enviado com sucesso!');
+                };
 
+
+                form.appendChild(inputForm);
+            }
+            if(element[2] === 'text'){
+                inputForm.setAttribute('text', element[1]);
+                inputForm.setAttribute('placeholder', element[1]);
+
+                form.appendChild(labelForm);
+                form.appendChild(getComponent('br'));
+                form.appendChild(inputForm);
+                form.appendChild(getComponent('br'));
+            }
+
+
+/* 
             form.appendChild(labelForm);
             form.appendChild(getComponent('br'));
             form.appendChild(inputForm);
-            form.appendChild(getComponent('br'));
-    });
+            form.appendChild(getComponent('br')); */
+
+
+        }
+
+    );
 
     }
 }
@@ -184,7 +230,6 @@ function changeTheme(){
 
     document.getElementsByTagName('head').item(0).replaceChild(newCss, oldCss);
 
-    console.log('oi');
 }
 
 function upPage(){
@@ -219,7 +264,6 @@ function createMenu(text){
 
     for(var a in text){
 
-        console.log(text[a][1]);
         const op = getComponent('a', text[a][0]);
         op.setAttribute('id', 'op'+a);
         op.onclick = text[a][1];
@@ -299,21 +343,24 @@ function addEventosScreen(obj){
         divEvento.appendChild(divDados);
         divEventos.appendChild(divEvento);
 
-        console.log(eventos[ev].unidade.endereco)
+ 
     }
 
 }
 
+function msgError(url){
+    alert('Para liberar a requisição da API, você deve acessar '.concat(url, ' e clicar em Request Tempory Access'));
+    window.open(url);
+}
 
 async function request(type, url){
 
     var msgRecebida = "";
 
+    var uri = "https://cors-anywhere.herokuapp.com/https://proxyapp.correios.com.br/v1/sro-rastro/" + url;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    myHeaders.append("Access-Control-Request-Headers", "Content-Type, Authorization");
-    myHeaders.append("Access-Control-Request-Method", "GET");
+
 
     var requestOptions = {
         Method: 'GET',
@@ -322,33 +369,16 @@ async function request(type, url){
         Cache: 'default'
     };
 
+   
+    var request = await fetch(uri, requestOptions).catch((er)=>msgError(uri));
 
-   //var request = await fetch("https://cors-anywhere.herokuapp.com/https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
-   var request = await fetch("https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
-  
-
-    //var request = await fetch("https://proxyapp.correios.com.br/v1/sro-rastro/" + url, requestOptions);
-    msgRecebida = await request.json();
-    return msgRecebida;
-
+    if(request.status == 403){
+        msgError(uri);
+        return "";
+    }
+    else{
+        msgRecebida = await request.json();
+        return msgRecebida;
+    }
 
 }
-
-/* async function  teste(){
-
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    
-    xhr.addEventListener("readystatechange", function() {
-      if(this.readyState === 4) {
-        console.log(this.responseText);
-      }
-    });
-    
-    xhr.open("GET", "https://proxyapp.correios.com.br/v1/sro-rastro/NA391180648BR");
-    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-    // WARNING: Cookies will be stripped away by the browser before sending the request.
-   // xhr.setRequestHeader("Cookie", "f5avraaaaaaaaaaaaaaaa_session_=AKIEBKONHJEGEOOKCLPLENLGENPKADJMIFPKDOIJILOOJPLOMDHNPODPAOJOPKHLNAADENJLGLEIBMAHCOGABJBFAMDBDGHHFFPIDHBLCPKMPFCANMOMLCMLBFKAACEK; LBprdExt1=633864202.47873.0000; LBprdint1=221970442.47873.0000");
-    
-    xhr.send();
-} */

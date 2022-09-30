@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
   }
   
 body{
@@ -96,9 +97,14 @@ p{
 
 .input-form{
     width:40%;
-    margin: 0 auto; 
-    text-align:center;
+    margin: 0 auto
 }
+
+#label{
+    margin-right: 60px;
+    margin-left: 4px;
+}
+
 
 input[type=text] {
     width: 100%;
@@ -108,6 +114,7 @@ input[type=text] {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
 
 input[type=submit] {
     width: 100%;
@@ -216,6 +223,10 @@ input[type="checkbox"]:checked ~ .check {
     background: white;
 }
 
+h1{
+    text-align: center;
+}
+
 .div-rodape{
     width: 100%;
     height: 200px;
@@ -229,6 +240,7 @@ input[type="checkbox"]:checked ~ .check {
 
 p{
     text-align: center;
+    color: #0a0a0a;
 }
 
 img {
